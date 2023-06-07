@@ -1,0 +1,7 @@
+local teleportService = game:GetService("TeleportService")
+local placeID = 13319024919
+
+game.Workspace.Teleport.TeleportPrompt.Triggered:Connect(function(plr)
+	local PSCode = teleportService:ReserveServer(placeID) -- reserve server
+	teleportService:TeleportToPrivateServer(placeID, PSCode, {plr}) -- the curly brackets turn it into a table
+end)
