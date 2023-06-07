@@ -1,0 +1,37 @@
+local character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+local tool = script.Parent
+local slash = tool:WaitForChild("Slash")
+local animationTrack = character:WaitForChild("Humanoid"):LoadAnimation(slash)
+local DebounceTable = {}
+animationTrack.Priority = Enum.AnimationPriority.Action
+
+local nextActivate = os.clock()
+local debounceTime = 0.2
+
+tool.Activated:Connect(function()
+	if os.clock() > nextActivate then
+		nextActivate = os.clock() + debounceTime
+
+		animationTrack:Play()
+
+		
+		script.Parent:WaitForChild("Hitbox").Touched:Connect(function(ObjHit)
+			local animtracks = character.Humanoid:GetPlayingAnimationTracks()
+			for i,v in pairs(animtracks) do
+				if v.Name == "Slash" then
+					if ObjHit.Parent then
+						if ObjHit.Parent:FindFirstChild("Humanoid") then
+							if DebounceTable[ObjHit.Parent] == true then return end
+							DebounceTable[ObjHit.Parent] = true
+							ObjHit.Parent.Humanoid:TakeDamage(math.random(20, 30))
+							task.wait(0.5)
+							DebounceTable[ObjHit.Parent] = nil
+						end
+					end
+				end
+			end
+			
+		end)
+	
+	end
+end)
